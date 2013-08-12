@@ -6,7 +6,7 @@ This is an attempt to embed the ruby language in R.
 
 Clone this git and
 
-	R CMD INSTALL R4rb
+	R CMD INSTALL rb4R
 
 ## Example (very basic)
 ```{.R execute="false"}
