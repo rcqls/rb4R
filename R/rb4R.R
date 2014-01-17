@@ -78,8 +78,8 @@ as.vector.rbRVector<- function(obj,...) {
     if(substr(ind,1,2)=="..") .rb(paste(":",substring(ind,3),sep=""))
     else ind
   }
-  else 
-    ind2
+  else #ruby is 0-indexed
+    ind2-1
 }
 
 "[.rbObj" <- function(obj,ind) {
@@ -245,15 +245,16 @@ rbObjSrv<-function() {
 
 "[<-.dynVarSrv" <- function(obj,key,value) { 
   key<-.ind4rbObj(key,as.character(substitute(key)))
-  if(is.null(obj$ls[[key]])) {
+  ##if(is.null(obj$ls[[key]])) {## VERY WEIRD ls is not a field of obj????
     if(!inherits(value,"rbObj")) value <- as.rbRVector(value)
     tmp<-.dynVar(key)
     tmp[..val][0]<-value
-  }
+  ##}
   obj   
 }
 
-## for the rb dyndoc variables
+## for the rb dyndoc variables (FIRST VERSION)
+if(FALSE) {
 "[[.dynVarSrv" <- function(obj,key,asVect=TRUE) {
   key<-.ind4rbObj(key,as.character(substitute(key)))
   tmp<-.dynVar(paste(key,"@",sep=""))
@@ -262,15 +263,52 @@ rbObjSrv<-function() {
 
 "[[<-.dynVarSrv" <- function(obj,key,asVect,value) { 
   key<-.ind4rbObj(key,as.character(substitute(key)))
-  if(is.null(obj$ls[[key]])) {
+  if(is.null(obj$ls[[key]])) {## VERY WEIRD ls is not a field of obj => BUT this answers always NULL!
     if(!inherits(value,"rbObj")) value <- as.rbRVector(value)
     tmp<-.dynVar(paste(key,"@",sep=""))
     tmp[..rb]<-value
   }
   obj   
 }
+}
 
+# SECOND VERSION
+"[[.dynVarSrv" <- function(obj,key,mode="@",asVect=TRUE) { #mode= @ (for rb), & (for jl)
+  key<-.ind4rbObj(key,as.character(substitute(key)))
+  tmp<-.dynVar(paste(key,mode,sep=""))
+  res <- switch(mode,"@"=tmp[..rb] ,"&"=tmp[..jl])
+  if(asVect) return(as.vector(res)) else return(res)
+}
 
+"[[<-.dynVarSrv" <- function(obj,key,mode="rb",asVect=TRUE,value) { #mode= @ (for rb), & (for jl)
+  key<-.ind4rbObj(key,as.character(substitute(key)))
+  #if(is.null(obj$ls[[key]])) {## VERY WEIRD ls is not a field of obj => BUT this answers always NULL!
+    if(!inherits(value,"rbObj")) value <- as.rbRVector(value)
+    tmp<-.dynVar(paste(key,mode,sep=""))
+    switch(mode,"@"=tmp[..rb]<-value,"&"=tmp[..jl]<-value)
+  #}
+  obj   
+}
+
+.dynVarWithArg<-function(var,arg="",mode="@") {
+  mode <-switch("@"="rb","&"="jl")
+#print(paste("$curDyn.tmpl.vars.extract_raw(%Q!",var,"!)[:",mode,"]",arg,sep=""))
+  .rb(paste("$curDyn.tmpl.vars.extract_raw(%Q!",var,"!)[:",mode,"]",arg,sep=""))
+}
+
+## only for the rb dyndoc variables
+"[[.dynVarWithArgSrv" <- function(obj,key,arg="",mode="@") {
+  as.vector(.dynVarWithArg(paste(key,mode,sep=""),arg,mode))
+}
+
+"[[<-.dynVarWithArgSrv" <- function(obj,key,arg="",value,mode="@") { 
+  if(!inherits(value,"rbObj")) value <- as.rbRVector(value)
+  tmp<-.dynVarWithArg(paste(key,mode,sep=""),arg,mode)
+  tmp<-value
+  obj   
+}
+
+## Obsolete soon
 .dynRbVar<-function(var,arg="") {
 #print(paste("$curDyn.tmpl.vars.extract_raw(%Q!",var,"!)[:rb]",arg,sep=""))
   .rb(paste("$curDyn.tmpl.vars.extract_raw(%Q!",var,"!)[:rb]",arg,sep=""))

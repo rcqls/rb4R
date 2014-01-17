@@ -1,4 +1,4 @@
-.First.lib <- function(lib, pkg) {
+.onLoad<- function(lib,pkg) {
   ## Use local=FALSE to allow easy loading of Tcl extensions
   library.dynam("rb4R", pkg, lib)#,local=FALSE)
   ## IMPORTANT : do not uncomment before for use in ruby directly!!!
@@ -12,6 +12,9 @@
   local({
   dynVar<-list()
   class(dynVar)<-"dynVarSrv"
+  dynVarWithArg<-list()
+  class(dynVarWithArg)<-"dynVarWithArgSrv"
+  ## OBSOLETE SOON
   dynRbVar<-list()
   class(dynRbVar)<-"dynRbVarSrv"
   },globalenv())
