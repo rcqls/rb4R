@@ -76,6 +76,8 @@ int rbIsRVector(VALUE rbobj) {
      rbobj2=rb_ary_new2(1);
      rb_ary_store(rbobj2,0,rbobj);
      rbobj=rbobj2;
+     //Seems that the 3 previous lines could be replaced by:
+     // return 1;
   }
   n=RARRAY_LEN(rbobj);
   for(i=0;i<n;i++) {
