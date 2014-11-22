@@ -234,7 +234,7 @@ rbObjSrv<-function() {
 # dyndoc
 
 .dynVar<-function(var) {
-  .rb(paste("$curDyn.tmpl.vars.extract_raw(%Q!",var,"!)",sep=""))
+  .rb(paste("Dyndoc.tmpl_mngr.vars.extract_raw(%Q!",var,"!)",sep=""))
 }
 
 ## for the text dyndoc variables
