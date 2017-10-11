@@ -11,7 +11,9 @@
 // #include <R_ext/eventloop.h>
 // #endif
 
-
+#if RUBY_API_VERSION_CODE >= 20400
+  #define rb_cFixnum rb_cInteger
+#endif
 
 static int rb4R_ruby_running=0;
 
