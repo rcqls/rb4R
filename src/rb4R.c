@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include <ruby.h>
+#include <ruby/version.h>
 //#include "ruby.h"
 #include <Rdefines.h>
 #include <R_ext/PrtUtil.h>
@@ -291,7 +292,11 @@ SEXP rbArray2RVector(VALUE rbobj)
     for(i=0;i<n;i++) {
       REAL(ans)[i]=NUM2DBL(rb_ary_entry(arr,i));
     }
+#if RUBY_API_VERSION_CODE >= 20400
+  } else if(class==rb_cInteger) {
+#else
   } else if(class==rb_cFixnum || class==rb_cBignum) {
+#endif
     PROTECT(ans=allocVector(INTSXP,n));
     for(i=0;i<n;i++) {
       INTEGER(ans)[i]=NUM2INT(rb_ary_entry(arr,i));
