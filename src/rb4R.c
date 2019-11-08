@@ -186,7 +186,6 @@ SEXP dotRbRequire(SEXP args)
 VALUE RVector2rbArray(SEXP vect)
 {
   VALUE res;
-  char *name;
   int i,n=0;
   Rcomplex cpl;
   VALUE res2; 
@@ -270,7 +269,6 @@ SEXP rbArray2RVector(VALUE rbobj)
 {
   SEXP ans;
   VALUE arr,class,expr;
-  char *name;
   int n,i;
   
   if(!rb_obj_is_kind_of(rbobj,rb_cArray)) {
@@ -323,8 +321,7 @@ SEXP rbArray2RVector(VALUE rbobj)
 
 SEXP rb4R_is_Rvector(SEXP args) {
   SEXP obj,ans;
-  VALUE rbobj,rbobj2;
-  int vect,i,n;
+  VALUE rbobj;
 
   obj=CADR(args);
   PROTECT(ans=allocVector(LGLSXP,1));  
@@ -396,7 +393,7 @@ static VALUE rbobj_inspect(VALUE rbobj) {
 
 //inspect
 SEXP rb4R_inspect(SEXP args) {
-  VALUE rbobj,rbval;
+  VALUE rbobj;
   int state=0;
 
   if (inherits(CADR(args), "rbObj")) {
@@ -444,7 +441,7 @@ SEXP rb4R_apply(SEXP args)
   SEXP ans;
   char *meth;
   VALUE rbobj,rbargs;
-  int state,i,nargs;
+  int i,nargs;
   
   nargs=length(args)-1;
   if(nargs<2) error("number of arguments greater than 2!!! ");
