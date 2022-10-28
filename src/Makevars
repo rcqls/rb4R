@@ -4,5 +4,5 @@ RUBY_ARCH_HDR_DIR := $(shell /usr/bin/env ruby -rrbconfig -e "print(RbConfig::CO
 RUBY_ARCH := $(shell /usr/bin/env ruby -rrbconfig -e "print(RbConfig::CONFIG['arch'])")
 RUBY_LIBS := $(shell /usr/bin/env ruby -rrbconfig -e "print(RbConfig::CONFIG['libdir']) ")
 # Added 1/7/2013: -DHAVE_STRUCT_TIMEVAL -DHAVE_STRUCT_TIMESPEC for compilation with ruby1.9.3 and ruby-2.0.0 
-PKG_CFLAGS = -fdeclspec -I$(RUBY_CFLAGS) -I$(RUBY_CFLAGS)/$(RUBY_ARCH) -I$(RUBY_ARCH_CFLAGS) -I$(RUBY_ARCH_HDR_DIR) -DHAVE_STRUCT_TIMEVAL -DHAVE_STRUCT_TIMESPEC -DHAVE_SIGNBIT #-I$(RUBY_CFLAGS)/$(shell /usr/bin/env ruby -rrbconfig -e "print(RbConfig::CONFIG['arch']) ")
+PKG_CFLAGS = -I$(RUBY_CFLAGS) -I$(RUBY_CFLAGS)/$(RUBY_ARCH) -I$(RUBY_ARCH_CFLAGS) -I$(RUBY_ARCH_HDR_DIR) -DHAVE_STRUCT_TIMEVAL -DHAVE_STRUCT_TIMESPEC -DHAVE_SIGNBIT #-I$(RUBY_CFLAGS)/$(shell /usr/bin/env ruby -rrbconfig -e "print(RbConfig::CONFIG['arch']) ")
 PKG_LIBS = -L$(RUBY_LIBS) $(shell /usr/bin/env ruby -rrbconfig -e "print(RbConfig::CONFIG['LIBRUBYARG'])") -lm -ldl -lgmp
